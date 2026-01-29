@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Linktree</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+    }
+
+    /* FUNDO HACKER */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.15);
+      width: 100%;
+      max-width: 350px;
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    a.button {
+      display: block;
+      text-decoration: none;
+      background: white;
+      color: black;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 30px rgba(255,255,255,0.4);
+    }
+
+    a.button:hover {
+      transform: scale(1.05);
+    }
+
+    a.button:active {
+      transform: scale(0.92);
+    }
+
+    /* CONFETES */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: white;
+      animation: fall 1s linear forwards;
+      z-index: 5;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(200px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <div class="container">
+    <div class="card">
+      <h1>VAMOS COMEÇAR</h1>
+
+      <a class="button" href="https://wa.me/5543999358044" onclick="confetti(event)">
+        COMEÇAR
+      </a>
+    </div>
+  </div>
+
+  <script>
+    /* MATRIX HACKER BRANCO */
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) drops[x] = Math.random() * canvas.height;
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'white';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+
+    /* CONFETES AO CLICAR */
+    function confetti(e) {
+      e.preventDefault();
+
+      for (let i = 0; i < 30; i++) {
+        const conf = document.createElement('div');
+        conf.classList.add('confetti');
+        conf.style.left = e.clientX + Math.random() * 40 - 20 + 'px';
+        conf.style.top = e.clientY + 'px';
+        conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(conf);
+
+        setTimeout(() => conf.remove(), 1000);
+      }
+
+      setTimeout(() => {
+        window.open('https://wa.me/5543999358044', '_blank');
+      }, 300);
+    }
+
+    window.onresize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+  </script>
+
+</body>
+</html>
